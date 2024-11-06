@@ -4,9 +4,7 @@ namespace FifteenPuzzle.Core.Interfaces;
 
 public interface IBoard
 {
-    int[,] Grid { get; }
-    Tile EmptyTile { get; }
+    List<int> Grid { get; set; }
     bool CanMove(Move move);
     void MoveTile(Move move);
-    Tile GetTilePosition(int tileNumber);
 }

@@ -9,6 +9,16 @@ public class ConsoleRenderer : IUiRenderer
         throw new NotImplementedException();
     }
 
+    public void RenderWarning(string message)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RenderInfo(string message)
+    {
+        throw new NotImplementedException();
+    }
+
     public void RenderBoard(IBoard board)
     {
         throw new NotImplementedException();

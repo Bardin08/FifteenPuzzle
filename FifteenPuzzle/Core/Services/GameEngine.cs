@@ -1,32 +1,38 @@
 using FifteenPuzzle.Core.Interfaces;
 using FifteenPuzzle.Core.Models;
+using FifteenPuzzle.Core.Utils;
 
 namespace FifteenPuzzle.Core.Services;
 
 public class GameEngine : IGameEngine
 {
+    private IBoard _board = null!;
+
     public void Initialize()
     {
-        throw new NotImplementedException();
+        _board = new Board();
+        _board.Grid.Shuffle();
+    }
+
+    public void Reset() => Initialize();
+
+    public IBoard GetCurrentBoard() => _board!;
+
+    public bool IsSolved()
+    {
+        var numbers = _board.Grid.ToList();
+        return numbers.SequenceEqual(numbers.OrderBy(x => x));
     }
 
     public bool MakeMove(Move move)
     {
-        throw new NotImplementedException();
-    }
+        var canMove = _board.CanMove(move);
+        if (!canMove)
+            return false;
 
-    public bool IsSolved()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Reset()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Board GetCurrentBoard()
-    {
-        throw new NotImplementedException();
+        _board.MoveTile(move);
+     
+        
+        return true;
     }
 }

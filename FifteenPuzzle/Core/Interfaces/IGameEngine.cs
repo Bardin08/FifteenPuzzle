@@ -8,4 +8,5 @@ public interface IGameEngine
     bool MakeMove(Move move);
     bool IsSolved();
     void Reset();
+    Board GetCurrentBoard();
 }

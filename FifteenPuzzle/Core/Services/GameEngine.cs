@@ -24,4 +24,9 @@ public class GameEngine : IGameEngine
     {
         throw new NotImplementedException();
     }
+
+    public Board GetCurrentBoard()
+    {
+        throw new NotImplementedException();
+    }
 }

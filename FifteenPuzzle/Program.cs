@@ -1,3 +1,17 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using FifteenPuzzle;
+using FifteenPuzzle.Cli.Commands;
+using FifteenPuzzle.Cli.Display;
+using FifteenPuzzle.Core.Services;
 
-Console.WriteLine("Hello, World!");
+var gameEngine = new GameEngine();
+var parser = new CommandParser();
+var commandProcessor = new CommandProcessor();
+var renderer = new ConsoleRenderer();
+
+var gameController = new GameController(
+    gameEngine: gameEngine,
+    commandParser: parser,
+    uiRenderer: renderer,
+    commandProcessor: commandProcessor);
+
+gameController.Execute();

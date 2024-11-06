@@ -3,37 +3,60 @@ using FifteenPuzzle.Core.Interfaces;
 
 namespace FifteenPuzzle;
 
-public class GameController(IGameEngine engine, ICommandParser parser, IGameRenderer renderer, ICommandProcessor commandProcessor)
+public class GameController(
+    IGameEngine gameEngine,
+    ICommandParser commandParser,
+    IUiRenderer uiRenderer,
+    ICommandProcessor commandProcessor)
 {
-    private readonly IGameEngine _engine = engine;
+    private readonly IGameEngine _gameEngine = gameEngine;
     private readonly ICommandProcessor _commandProcessor = commandProcessor;
-    private readonly ICommandParser _parser = parser;
-    private readonly IGameRenderer _renderer = renderer;
+    private readonly ICommandParser _commandParser = commandParser;
+    private readonly IUiRenderer _uiRenderer = uiRenderer;
 
-    public void HandleInput(string input)
+    public bool IsRunning => !_gameEngine.IsSolved();
+
+    public void Execute()
     {
-        var command = _parser.Parse(input);
+        while (!_gameEngine.IsSolved())
+        {
+            var input = Console.ReadLine();
+            if (string.IsNullOrEmpty(input))
+            {
+                _uiRenderer.RenderWarning("Invalid input.");
+                continue;
+            }
+
+            HandleInput(input);
+        }
+
+        _uiRenderer.RenderInfo("Puzzle solved. Congratulations!");
+    }
+
+    private void HandleInput(string input)
+    {
+        var command = _commandParser.Parse(input);
         if (command is null)
         {
-            _renderer.RenderError("Command can not be null");
+            _uiRenderer.RenderError("Command can not be null");
             return;
         }
 
         if (!_commandProcessor.CanExecute(command))
         {
-            _renderer.RenderError($"Cannot execute {command.Name} now");
+            _uiRenderer.RenderError($"Cannot execute {command.Name} now");
             return;
         }
 
         var completed = _commandProcessor.Execute(command);
         if (completed)
         {
-            var currentBoard = _engine.GetCurrentBoard();
-            _renderer.RenderBoard(currentBoard);
+            var currentBoard = _gameEngine.GetCurrentBoard();
+            _uiRenderer.RenderBoard(currentBoard);
         }
         else
         {
-            _renderer.RenderError("Error while executing command");
+            _uiRenderer.RenderError("Error while executing command");
         }
     }
 }

@@ -11,16 +11,20 @@ public class GameEngine : IGameEngine
     private readonly List<IGameEventObserver> _eventObservers = [];
     private readonly Stack<Move> _moves = new();
     private IBoard _board = null!;
+    private int _boardSeed;
 
     public bool IsRunning { get; private set; }
     public bool PuzzleSolved { get; private set; }
 
     public IReadOnlyList<Move> Moves => _moves.ToList();
 
-    public void Initialize()
+    public void Initialize(bool regenerateSeed = true)
     {
+        if (regenerateSeed)
+            _boardSeed = DateTime.Now.Millisecond * DateTime.Now.Second + DateTime.Now.Minute;
+
         _board = new Board();
-        _board.Grid.Shuffle();
+        _board.Grid.Shuffle(_boardSeed);
 
         IsRunning = true;
         CheckIfSolved();
@@ -28,7 +32,7 @@ public class GameEngine : IGameEngine
         Notify(new GameStartedEvent(DeepCopier.Copy(_board), DateTime.Now));
     }
 
-    public void Reset() => Initialize();
+    public void Reset() => Initialize(regenerateSeed: false);
 
     public IBoard GetCurrentBoard() => _board;
 
@@ -42,7 +46,7 @@ public class GameEngine : IGameEngine
         _moves.Push(move);
 
         Notify(new TileMovedEvent(move, DateTime.Now));
-        
+
         CheckIfSolved();
         return true;
     }

@@ -9,7 +9,7 @@ public interface IGameEngine : IObservable
 
     IReadOnlyList<Move> Moves { get; }
 
-    void Initialize();
+    void Initialize(bool regenerateSeed = true);
     bool MakeMove(Move move);
     void UndoLastMove();
     void Reset();

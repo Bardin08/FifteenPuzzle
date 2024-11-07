@@ -24,7 +24,8 @@ public class CommandProcessor(IGameEngine gameEngine) : ICommandProcessor
 
     public bool Execute(IGameCommand command)
     {
-        throw new NotImplementedException();
+        // TODO: track analytics, log command exec, and so..
+        return command.Execute();
     }
 
     public bool CanExecute(IGameCommand command)

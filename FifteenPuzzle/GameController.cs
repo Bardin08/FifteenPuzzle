@@ -36,7 +36,7 @@ public class GameController(
                 continue;
             }
 
-            var commandCompleted = command.Execute();
+            var commandCompleted = _commandProcessor.Execute(command);
             if (!commandCompleted)
             {
                 _uiRenderer.RenderError($"Error occured while executing '{command.Name}' command");

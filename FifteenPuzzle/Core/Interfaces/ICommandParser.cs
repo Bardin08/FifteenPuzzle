@@ -5,11 +5,5 @@ namespace FifteenPuzzle.Core.Interfaces;
 public interface ICommandParser
 {
     IGameCommand? Parse(string input);
+    IReadOnlyCollection<IGameCommand> AvailableCommands { get; }
 }
-
-
-// user input
-//      -> parse (validate, convert to command)
-//      -> run command
-//      -> dispay board state
-// 

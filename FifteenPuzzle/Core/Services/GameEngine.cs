@@ -2,7 +2,6 @@ using DeepCopy;
 using FifteenPuzzle.Core.Events;
 using FifteenPuzzle.Core.Interfaces;
 using FifteenPuzzle.Core.Models;
-using FifteenPuzzle.Core.Utils;
 
 namespace FifteenPuzzle.Core.Services;
 
@@ -24,7 +23,7 @@ public class GameEngine : IGameEngine
             _boardSeed = DateTime.Now.Millisecond * DateTime.Now.Second + DateTime.Now.Minute;
 
         _board = new Board();
-        _board.Grid.Shuffle(_boardSeed);
+        _board.Shuffle(_boardSeed);
 
         IsRunning = true;
         CheckIfSolved();

@@ -42,6 +42,7 @@ public class CommandParser : ICommandParser
         return new Dictionary<string, IGameCommand>
         {
             ["start"] = new StartCommand(_engine),
+            ["undo"] = new UndoCommand(_engine),
             ["restart"] = new RestartCommand(_engine),
             ["quit"] = new QuitCommand(),
             ["show"] = new ShowCommand(_engine, _renderer),

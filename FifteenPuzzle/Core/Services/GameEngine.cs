@@ -6,10 +6,13 @@ namespace FifteenPuzzle.Core.Services;
 
 public class GameEngine : IGameEngine
 {
+    private readonly Stack<Move> _moves = new();
     private IBoard _board = null!;
 
-    public bool IsRunning { get; private set;  }
+    public bool IsRunning { get; private set; }
     public bool PuzzleSolved { get; private set; }
+
+    public IReadOnlyList<Move> Moves => _moves.ToList();
 
     public void Initialize()
     {
@@ -31,9 +34,29 @@ public class GameEngine : IGameEngine
             return false;
 
         _board.MoveTile(move);
+        _moves.Push(move);
 
         CheckIfSolved();
         return true;
+    }
+
+    public void UndoLastMove()
+    {
+        if (_moves.Count == 0)
+            return;
+
+        var lastMove = _moves.Pop();
+
+        var oppositeDirection = lastMove.MoveDirection switch
+        {
+            Move.Direction.Up => Move.Direction.Down,
+            Move.Direction.Down => Move.Direction.Up,
+            Move.Direction.Left => Move.Direction.Right,
+            Move.Direction.Right => Move.Direction.Left,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+
+        MakeMove(lastMove with { MoveDirection = oppositeDirection });
     }
 
     private void CheckIfSolved()

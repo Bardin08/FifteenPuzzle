@@ -1,5 +1,6 @@
 namespace FifteenPuzzle.Infrastructure.Configuration;
 
-public class GameSettings
+public static class GameSettings
 {
+    public static string GameFolder => "./games/";
 }

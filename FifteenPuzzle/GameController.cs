@@ -6,18 +6,20 @@ namespace FifteenPuzzle;
 
 public class GameController(
     IGameEngine gameEngine,
+    ICommandProcessor commandProcessor,
     ICommandParser commandParser,
     IUiRenderer uiRenderer,
-    ICommandProcessor commandProcessor)
+    KeyboardInterceptor keyboardInterceptor,
+    GameStatsTracker gameStatsTracker,
+    EventsFlowObserver eventsFlowObserver)
 {
     private readonly IGameEngine _gameEngine = gameEngine;
     private readonly ICommandProcessor _commandProcessor = commandProcessor;
     private readonly ICommandParser _commandParser = commandParser;
     private readonly IUiRenderer _uiRenderer = uiRenderer;
-
-    private readonly KeyboardInterceptor _keyboardInterceptor = new(uiRenderer);
-    
-    private readonly GameStatsTracker _gameStatsTracker = new();
+    private readonly KeyboardInterceptor _keyboardInterceptor = keyboardInterceptor;
+    private readonly GameStatsTracker _gameStatsTracker = gameStatsTracker;
+    private readonly EventsFlowObserver _eventsFlowObserver = eventsFlowObserver;
 
     public void Execute()
     {
@@ -58,6 +60,7 @@ public class GameController(
 
     private void Initialize()
     {
+        _gameEngine.AddObserver(_eventsFlowObserver);
         _gameEngine.AddObserver(_gameStatsTracker);
     }
 

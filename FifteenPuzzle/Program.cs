@@ -2,24 +2,30 @@
 using FifteenPuzzle.Cli.Commands;
 using FifteenPuzzle.Cli.Console;
 using FifteenPuzzle.Core.Events.Observers;
+using FifteenPuzzle.Core.Interfaces;
+using FifteenPuzzle.Core.Models;
 using FifteenPuzzle.Core.Services;
 using FifteenPuzzle.Infrastructure.Persistence;
+using Microsoft.Extensions.DependencyInjection;
 
-var gameEngine = new GameEngine();
+var services = new ServiceCollection();
 
-var repository = new FileSystemRepository();
-var eventsFlowObserver = new EventsFlowObserver(repository);
+services.AddSingleton<IGameEngine, GameEngine>();
 
-gameEngine.AddObserver(eventsFlowObserver);
+services.AddSingleton<ICommandProcessor, CommandProcessor>();
+services.AddSingleton<IUiRenderer, ConsoleRenderer>();
+services.AddSingleton<ICommandParser, CommandParser>();
 
-var commandProcessor = new CommandProcessor(gameEngine);
-var renderer = new ConsoleRenderer();
-var parser = new CommandParser(gameEngine, renderer);
+services.AddSingleton<EventsFlowObserver>();
+services.AddSingleton<GameStatsTracker>();
 
-var gameController = new GameController(
-    gameEngine: gameEngine,
-    commandParser: parser,
-    uiRenderer: renderer,
-    commandProcessor: commandProcessor);
+services.AddSingleton<KeyboardInterceptor>();
 
+services.AddSingleton<IFileSystemRepository, FileSystemRepository>();
+
+services.AddSingleton<GameController>();
+
+using var serviceProvider = services.BuildServiceProvider();
+
+var gameController = serviceProvider.GetRequiredService<GameController>();
 gameController.Execute();

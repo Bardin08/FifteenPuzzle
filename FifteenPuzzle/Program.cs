@@ -4,12 +4,11 @@ using FifteenPuzzle.Cli.Display;
 using FifteenPuzzle.Core.Services;
 
 var gameEngine = new GameEngine();
-var parser = new CommandParser();
-var commandProcessor = new CommandProcessor();
+var commandProcessor = new CommandProcessor(gameEngine);
 var renderer = new ConsoleRenderer();
+var parser = new CommandParser(gameEngine, renderer);
 
 var gameController = new GameController(
-    gameEngine: gameEngine,
     commandParser: parser,
     uiRenderer: renderer,
     commandProcessor: commandProcessor);

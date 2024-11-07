@@ -3,7 +3,6 @@ using FifteenPuzzle.Cli.Commands;
 using FifteenPuzzle.Cli.Console;
 using FifteenPuzzle.Core.Events.Observers;
 using FifteenPuzzle.Core.Interfaces;
-using FifteenPuzzle.Core.Models;
 using FifteenPuzzle.Core.Services;
 using FifteenPuzzle.Infrastructure.Persistence;
 using Microsoft.Extensions.DependencyInjection;

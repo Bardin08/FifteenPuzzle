@@ -45,7 +45,7 @@ public class GameEngine : IGameEngine
         if (_moves.Count == 0)
             return;
 
-        var lastMove = _moves.Pop();
+        var lastMove = _moves.Peek();
 
         var oppositeDirection = lastMove.MoveDirection switch
         {

@@ -1,3 +1,5 @@
+using DeepCopy;
+using FifteenPuzzle.Core.Events;
 using FifteenPuzzle.Core.Interfaces;
 using FifteenPuzzle.Core.Models;
 using FifteenPuzzle.Core.Utils;
@@ -6,6 +8,7 @@ namespace FifteenPuzzle.Core.Services;
 
 public class GameEngine : IGameEngine
 {
+    private readonly List<IGameEventObserver> _eventObservers = [];
     private readonly Stack<Move> _moves = new();
     private IBoard _board = null!;
 
@@ -21,6 +24,8 @@ public class GameEngine : IGameEngine
 
         IsRunning = true;
         CheckIfSolved();
+
+        Notify(new GameStartedEvent(DeepCopier.Copy(_board), DateTime.Now));
     }
 
     public void Reset() => Initialize();
@@ -36,6 +41,8 @@ public class GameEngine : IGameEngine
         _board.MoveTile(move);
         _moves.Push(move);
 
+        Notify(new TileMovedEvent(move, DateTime.Now));
+        
         CheckIfSolved();
         return true;
     }
@@ -64,7 +71,14 @@ public class GameEngine : IGameEngine
         var numbers = _board.Grid.ToList();
         PuzzleSolved = numbers.SequenceEqual(numbers.OrderBy(x => x));
 
-        if (PuzzleSolved)
-            IsRunning = false;
+        if (!PuzzleSolved)
+            return;
+
+        IsRunning = false;
+        Notify(new GameCompletedEvent(DateTime.Now));
     }
+
+    public void AddObserver(IGameEventObserver observer) => _eventObservers.Add(observer);
+    public void RemoveObserver(IGameEventObserver observer) => _eventObservers.Remove(observer);
+    public void Notify(IGameEvent gameEvent) => _eventObservers.ForEach(observer => observer.OnGameEvent(gameEvent));
 }

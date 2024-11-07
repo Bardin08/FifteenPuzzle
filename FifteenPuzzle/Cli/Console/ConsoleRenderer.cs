@@ -1,4 +1,5 @@
 using FifteenPuzzle.Core.Interfaces;
+using FifteenPuzzle.Core.Models;
 
 namespace FifteenPuzzle.Cli.Console;
 
@@ -53,11 +54,15 @@ public class ConsoleRenderer : IUiRenderer
         System.Console.Clear();
     }
 
-    public void RenderVictoryScreen(IBoard board)
+    public void RenderVictoryScreen(IBoard board, GameStats stats)
     {
         System.Console.Clear();
         RenderBoard(board);
-        RenderInfo(Messages.VictoryScreen);
+        var formattedMessage = string.Format(
+            Messages.VictoryScreen,
+            stats.TotalMoves.ToString("000").PadRight(8), 
+            $"{stats.Duration.Hours:00}:{stats.Duration.Minutes:00}:{stats.Duration.Seconds:00}");
+        RenderInfo(formattedMessage);
 
         RenderInputRequest("Press any key to exit...");
         System.Console.ReadKey(true);

@@ -1,3 +1,5 @@
+using FifteenPuzzle.Core.Models;
+
 namespace FifteenPuzzle.Core.Interfaces;
 
 public interface IUiRenderer
@@ -10,6 +12,6 @@ public interface IUiRenderer
     void ClearScreen();
 
     void RenderWelcomeScreen();
-    void RenderVictoryScreen(IBoard board);
+    void RenderVictoryScreen(IBoard board, GameStats stats);
     void RenderInstructionsScreen();
 }

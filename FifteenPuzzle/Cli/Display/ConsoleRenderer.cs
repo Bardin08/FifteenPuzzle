@@ -11,6 +11,7 @@ public class ConsoleRenderer : IUiRenderer
     private const ConsoleColor ErrorColor = ConsoleColor.Red;
     private const ConsoleColor WarningColor = ConsoleColor.Yellow;
     private const ConsoleColor InfoColor = ConsoleColor.Cyan;
+
     private const ConsoleColor BorderColor = ConsoleColor.DarkBlue;
     private const ConsoleColor NumberColor = ConsoleColor.White;
     private const ConsoleColor EmptyTileColor = ConsoleColor.Magenta;
@@ -33,6 +34,43 @@ public class ConsoleRenderer : IUiRenderer
         Console.WriteLine();
     }
 
+    public void RenderInputRequest(string message)
+    {
+        WriteColored($"🔤 {message} ", InfoColor, false);
+    }
+
+    public void ClearScreen()
+    {
+        Console.Clear();
+    }
+
+    public void RenderWelcomeScreen()
+    {
+        Console.Clear();
+        RenderInfo(Messages.WelcomeScreen);
+
+        Thread.Sleep(1500);
+        Console.Clear();
+    }
+
+    public void RenderVictoryScreen(IBoard board)
+    {
+        Console.Clear();
+        RenderBoard(board);
+        RenderInfo(Messages.VictoryScreen);
+
+        RenderInputRequest("Press any key to exit...");
+        Console.ReadKey(true);
+    }
+
+    public void RenderInstructionsScreen()
+    {
+        Console.Clear();
+        RenderInfo(Messages.Instructions); 
+
+        RenderInputRequest("Press any key to continue...");
+    }
+    
     public void RenderBoard(IBoard board)
     {
         Console.WriteLine();

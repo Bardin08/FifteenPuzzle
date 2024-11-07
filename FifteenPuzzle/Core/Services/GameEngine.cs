@@ -29,10 +29,15 @@ public class GameEngine : IGameEngine
         IsRunning = true;
         CheckIfSolved();
 
-        Notify(new GameStartedEvent(DeepCopier.Copy(_board), DateTime.Now));
+        if (regenerateSeed)
+            Notify(new GameStartedEvent(DeepCopier.Copy(_board), DateTime.Now));
     }
 
-    public void Reset() => Initialize(regenerateSeed: false);
+    public void Reset()
+    {
+        Initialize(regenerateSeed: false);
+        Notify(new GameRestartedEvent(DateTime.Now));
+    }
 
     public IBoard GetCurrentBoard() => _board;
 

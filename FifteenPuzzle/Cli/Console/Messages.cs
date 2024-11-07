@@ -33,7 +33,6 @@ public static class Messages
           - 'quit' to exit game
         - Display commands:
           - 'show' to display current board
-          - 'stats' to show your progress
           - 'help' to see these instructions
         - Goal: Arrange numbers from 1 to 15 in order! 🎯
         

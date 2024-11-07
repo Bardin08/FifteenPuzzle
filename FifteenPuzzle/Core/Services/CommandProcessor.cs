@@ -1,4 +1,3 @@
-using FifteenPuzzle.Cli.Commands;
 using FifteenPuzzle.Core.Commands;
 using FifteenPuzzle.Core.Interfaces;
 
@@ -18,7 +17,8 @@ public class CommandProcessor(IGameEngine gameEngine) : ICommandProcessor
     [
         nameof(RestartCommand),
         nameof(ShowCommand),
-        nameof(MoveTileCommand)
+        nameof(MoveTileCommand),
+        nameof(UndoCommand)
     ];
 
 

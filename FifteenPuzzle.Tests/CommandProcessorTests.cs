@@ -1,4 +1,3 @@
-using FifteenPuzzle.Cli.Commands;
 using FifteenPuzzle.Core.Commands;
 using FifteenPuzzle.Core.Interfaces;
 using FifteenPuzzle.Core.Models;
@@ -81,5 +80,6 @@ public class CommandProcessorTests
         new object[] { new RestartCommand(null!) },
         new object[] { new ShowCommand(null!, null!) },
         new object[] { new MoveTileCommand(null!, Move.Direction.Up) },
+        new object[] { new UndoCommand(null!) }
     };
 }

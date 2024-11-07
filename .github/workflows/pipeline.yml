@@ -149,3 +149,4 @@ jobs:
           docker build -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REPOSITORY }}:${{ needs.versioning.outputs.version }} .
           docker tag ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REPOSITORY }}:${{ needs.versioning.outputs.version }} ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REPOSITORY }}:latest
           docker push ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REPOSITORY }}:${{ needs.versioning.outputs.version }}
+          docker push ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REPOSITORY }}:latest

@@ -24,7 +24,7 @@ public class GameEngine : IGameEngine
             _boardSeed = DateTime.Now.Millisecond * DateTime.Now.Second + DateTime.Now.Minute;
 
         _board = new Board();
-        _board.Grid.Shuffle(_boardSeed);
+        _board.Shuffle(_boardSeed);
 
         IsRunning = true;
         CheckIfSolved();

@@ -2,7 +2,7 @@ using FifteenPuzzle.Core.Models;
 
 namespace FifteenPuzzle.Core.Interfaces;
 
-public interface IGameEngine
+public interface IGameEngine : IObservable
 {
     bool IsRunning { get; }
     bool PuzzleSolved { get; }

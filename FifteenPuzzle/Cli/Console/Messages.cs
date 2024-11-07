@@ -17,6 +17,9 @@ public static class Messages
         ║           Puzzle Completed! 🏆        ║
         ║         You're a puzzle master!       ║
         ╚═══════════════════════════════════════╝
+        ║           Total Moves: {0}       ║
+        ║         Game Duration: {1}       ║
+        ╚═══════════════════════════════════════╝
         """;
 
     public const string Instructions =

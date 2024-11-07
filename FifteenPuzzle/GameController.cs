@@ -1,4 +1,5 @@
 using FifteenPuzzle.Cli.Console;
+using FifteenPuzzle.Core.Events.Observers;
 using FifteenPuzzle.Core.Interfaces;
 
 namespace FifteenPuzzle;
@@ -15,9 +16,13 @@ public class GameController(
     private readonly IUiRenderer _uiRenderer = uiRenderer;
 
     private readonly KeyboardInterceptor _keyboardInterceptor = new(uiRenderer);
+    
+    private readonly GameStatsTracker _gameStatsTracker = new();
 
     public void Execute()
     {
+        Initialize();
+        
         _uiRenderer.RenderWelcomeScreen();
         _uiRenderer.RenderInstructionsScreen();
         _keyboardInterceptor.WaitForKeyPress();
@@ -44,11 +49,16 @@ public class GameController(
             if (_gameEngine.PuzzleSolved)
             {
                 _uiRenderer.ClearScreen();
-                _uiRenderer.RenderVictoryScreen(_gameEngine.GetCurrentBoard());
+                _uiRenderer.RenderVictoryScreen(_gameEngine.GetCurrentBoard(), _gameStatsTracker.GetStatistics());
 
                 executeNextRound = false;
             }
         }
+    }
+
+    private void Initialize()
+    {
+        _gameEngine.AddObserver(_gameStatsTracker);
     }
 
     private IGameCommand GetCommand()

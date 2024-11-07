@@ -8,10 +8,14 @@ public class GameEngine : IGameEngine
 {
     private IBoard _board = null!;
 
+    public bool IsRunning { get; private set;  } = false;
+
     public void Initialize()
     {
         _board = new Board();
         _board.Grid.Shuffle();
+
+        IsRunning = true;
     }
 
     public void Reset() => Initialize();

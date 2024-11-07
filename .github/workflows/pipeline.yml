@@ -18,27 +18,6 @@ env:
   GHCR_REPOSITORY: fifteenpuzzle
 
 jobs:
-  linting:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up .NET Core SDK
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
-
-      - name: Format only modified files
-        run: |
-          MODIFIED_FILES=$(git diff --name-only origin/master...HEAD -- '*.cs')
-          if [ -n "$MODIFIED_FILES" ]; then
-            echo "$MODIFIED_FILES" | xargs dotnet format backend/LinkShortener.sln --include --verify-no-changes
-          else
-            echo "No C# files modified. Skipping format check."
-          fi
-
   versioning:
     runs-on: ubuntu-latest
     outputs:
@@ -113,7 +92,7 @@ jobs:
           dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
 
       - name: Restore NuGet packages
-        run: dotnet restore backend/${{ env.SOLUTION_NAME }}
+        run: dotnet restore ${{ env.SOLUTION_NAME }}
 
       - name: Cache updated NuGet packages
         uses: actions/cache@v4
@@ -130,20 +109,20 @@ jobs:
           ${{ env.APPLICATION_NAME }}/${{ env.APPLICATION_NAME }}.csproj \
           --configuration Release \
           --no-restore \
-          --output backend/output \
+          --output output \
           /p:Version=${{ needs.versioning.outputs.version }}
 
       - name: Download Build Metadata Artifact
         uses: actions/download-artifact@v4
         with:
           name: build-metadata
-          path: backend/output/
+          path: output/
 
       - name: Save build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-output
-          path: backend/output
+          path: output
 
   docker:
     runs-on: ubuntu-latest
@@ -156,7 +135,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-output
-          path: backend/output/
+          path: output/
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -167,5 +146,5 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REPOSITORY }}:${{ needs.versioning.outputs.version }} backend/
+          docker build -t ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REPOSITORY }}:${{ needs.versioning.outputs.version }} .
           docker push ${{ env.GHCR_REGISTRY }}/${{ env.GHCR_REPOSITORY }}:${{ needs.versioning.outputs.version }}

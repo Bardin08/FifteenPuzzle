@@ -17,8 +17,6 @@ public class CommandParser : ICommandParser
         _commands = InitializeCommands();
     }
 
-    public IReadOnlyCollection<IGameCommand> AvailableCommands => _commands.Values;
-
     public IGameCommand Parse(string input)
     {
         var loweredInput = input.ToLower().Trim();

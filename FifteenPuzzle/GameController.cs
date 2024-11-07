@@ -1,5 +1,4 @@
 using FifteenPuzzle.Cli.Display;
-using FifteenPuzzle.Core.Commands;
 using FifteenPuzzle.Core.Interfaces;
 
 namespace FifteenPuzzle;

@@ -1,4 +1,4 @@
-namespace FifteenPuzzle.Core.Commands;
+namespace FifteenPuzzle.Core.Interfaces;
 
 public interface ICommandProcessor 
 {

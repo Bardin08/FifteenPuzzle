@@ -1,3 +1,4 @@
+using FifteenPuzzle.Cli.Display;
 using FifteenPuzzle.Core.Commands;
 using FifteenPuzzle.Core.Interfaces;
 
@@ -14,49 +15,65 @@ public class GameController(
     private readonly ICommandParser _commandParser = commandParser;
     private readonly IUiRenderer _uiRenderer = uiRenderer;
 
-    public bool IsRunning => !_gameEngine.IsSolved();
+    private readonly KeyboardInterceptor _keyboardInterceptor = new(uiRenderer);
 
     public void Execute()
     {
-        while (!_gameEngine.IsSolved())
+        _uiRenderer.RenderWelcomeScreen();
+        _uiRenderer.RenderInstructionsScreen();
+        _keyboardInterceptor.WaitForKeyPress();
+        _uiRenderer.ClearScreen();
+
+        var executeNextRound = true;
+        
+        while (executeNextRound)
         {
-            var input = Console.ReadLine();
-            if (string.IsNullOrEmpty(input))
+            var command = GetCommand();
+            
+            if (!_commandProcessor.CanExecute(command))
             {
-                _uiRenderer.RenderWarning("Invalid input.");
+                _uiRenderer.RenderWarning("This command can not be executed now");
                 continue;
             }
 
-            HandleInput(input);
-        }
+            var commandCompleted = _commandProcessor.Execute(command);
+            if (!commandCompleted)
+            {
+                _uiRenderer.RenderError($"Error occured while executing '{command.Name}' command");
+            }
+            
+            if (_gameEngine.PuzzleSolved)
+            {
+                _uiRenderer.ClearScreen();
+                _uiRenderer.RenderVictoryScreen(_gameEngine.GetCurrentBoard());
 
-        _uiRenderer.RenderInfo("Puzzle solved. Congratulations!");
+                executeNextRound = false;
+            }
+        }
     }
 
-    private void HandleInput(string input)
+    private IGameCommand GetCommand()
     {
-        var command = _commandParser.Parse(input);
-        if (command is null)
+        IGameCommand? command = null!;
+
+        while (command is null)
         {
-            _uiRenderer.RenderError("Command can not be null");
-            return;
+            _uiRenderer.RenderInputRequest("Enter your command:");
+            
+            var commandInput = _keyboardInterceptor.ReadFromConsole();
+            while (string.IsNullOrEmpty(commandInput))
+            {
+                _uiRenderer.RenderError("Please enter a valid command");
+                commandInput = _keyboardInterceptor.ReadFromConsole();
+            }
+
+            command = _commandParser.Parse(commandInput);
+            if (command is null)
+            {
+                _uiRenderer.RenderError("Invalid command");
+            }
         }
 
-        if (!_commandProcessor.CanExecute(command))
-        {
-            _uiRenderer.RenderError($"Cannot execute {command.Name} now");
-            return;
-        }
-
-        var completed = _commandProcessor.Execute(command);
-        if (completed)
-        {
-            var currentBoard = _gameEngine.GetCurrentBoard();
-            _uiRenderer.RenderBoard(currentBoard);
-        }
-        else
-        {
-            _uiRenderer.RenderError("Error while executing command");
-        }
+        return command;
     }
 }

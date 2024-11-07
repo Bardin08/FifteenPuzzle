@@ -4,4 +4,6 @@ public interface IGameCommand
 {
     public string Name { get; }
     public string Description { get; }
+    
+    bool Execute();
 }

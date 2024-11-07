@@ -2,20 +2,19 @@ using DeepCopy;
 using FifteenPuzzle.Core.Events;
 using FifteenPuzzle.Core.Interfaces;
 using FifteenPuzzle.Core.Models;
+using FifteenPuzzle.Core.Utils;
 
 namespace FifteenPuzzle.Core.Services;
 
 public class GameEngine : IGameEngine
 {
     private readonly List<IGameEventObserver> _eventObservers = [];
-    private readonly Stack<Move> _moves = new();
+    private readonly CircularBuffer<Move> _moves = new(8);
     private IBoard _board = null!;
     private int _boardSeed;
 
     public bool IsRunning { get; private set; }
     public bool PuzzleSolved { get; private set; }
-
-    public IReadOnlyList<Move> Moves => _moves.ToList();
 
     public void Initialize(bool regenerateSeed = true)
     {
@@ -60,7 +59,7 @@ public class GameEngine : IGameEngine
         if (_moves.Count == 0)
             return;
 
-        var lastMove = _moves.Peek();
+        var lastMove = _moves.Pop();
 
         var oppositeDirection = lastMove.MoveDirection switch
         {
@@ -71,7 +70,13 @@ public class GameEngine : IGameEngine
             _ => throw new ArgumentOutOfRangeException()
         };
 
-        MakeMove(lastMove with { MoveDirection = oppositeDirection });
+        var move = lastMove with { MoveDirection = oppositeDirection };
+
+        var canMove = _board.CanMove(move);
+        if (!canMove) return;
+
+        _board.MoveTile(move);
+        Notify(new TileMovedEvent(move, DateTime.Now));
     }
 
     private void CheckIfSolved()

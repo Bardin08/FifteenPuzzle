@@ -17,7 +17,7 @@ public class GameEngine : IGameEngine
         _board.Grid.Shuffle();
 
         IsRunning = true;
-        PuzzleSolved = false;
+        CheckIfSolved();
     }
 
     public void Reset() => Initialize();

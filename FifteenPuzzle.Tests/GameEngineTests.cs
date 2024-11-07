@@ -10,7 +10,7 @@ public class GameEngineTests
     public void Initialize_BoardShuffled_InitializesCorrectly()
     {
         _sut.Initialize();
-        var isOrdered = _sut.IsSolved();
+        var isOrdered = _sut.PuzzleSolved;
         Assert.False(isOrdered);
     }
 }

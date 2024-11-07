@@ -1,4 +1,4 @@
-namespace FifteenPuzzle.Cli.Display;
+namespace FifteenPuzzle.Cli.Console;
 
 public static class Messages
 {

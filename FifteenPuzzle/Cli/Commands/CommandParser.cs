@@ -17,7 +17,7 @@ public class CommandParser : ICommandParser
         _commands = InitializeCommands();
     }
 
-    public IGameCommand Parse(string input)
+    public IGameCommand? Parse(string input)
     {
         var loweredInput = input.ToLower().Trim();
 
@@ -34,12 +34,7 @@ public class CommandParser : ICommandParser
             return new MoveTileCommand(_engine, direction);
         }
 
-        if (_commands.TryGetValue(loweredInput, out var command))
-        {
-            return command;
-        }
-
-        throw new ArgumentException("Unknown command");
+        return _commands.GetValueOrDefault(loweredInput);
     }
 
     private Dictionary<string, IGameCommand> InitializeCommands()

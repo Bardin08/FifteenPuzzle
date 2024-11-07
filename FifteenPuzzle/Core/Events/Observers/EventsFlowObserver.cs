@@ -16,6 +16,10 @@ public class EventsFlowObserver(IFileSystemRepository repository) : IGameEventOb
                 _repository.Initialize(started.InitBoard.Grid);
                 break;
 
+            case GameRestartedEvent:
+                _repository.Reset();
+                break;
+            
             case TileMovedEvent moved:
                 _repository.AddMove(new MoveDescriptor
                 {

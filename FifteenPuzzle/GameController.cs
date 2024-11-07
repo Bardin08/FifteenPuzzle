@@ -5,10 +5,12 @@ using FifteenPuzzle.Core.Interfaces;
 namespace FifteenPuzzle;
 
 public class GameController(
+    IGameEngine gameEngine,
     ICommandParser commandParser,
     IUiRenderer uiRenderer,
     ICommandProcessor commandProcessor)
 {
+    private readonly IGameEngine _gameEngine = gameEngine;
     private readonly ICommandProcessor _commandProcessor = commandProcessor;
     private readonly ICommandParser _commandParser = commandParser;
     private readonly IUiRenderer _uiRenderer = uiRenderer;
@@ -22,7 +24,9 @@ public class GameController(
         _keyboardInterceptor.WaitForKeyPress();
         _uiRenderer.ClearScreen();
 
-        while (true)
+        var executeNextRound = true;
+        
+        while (executeNextRound)
         {
             var command = GetCommand();
             
@@ -32,22 +36,19 @@ public class GameController(
                 continue;
             }
 
-            command.Execute();
+            var commandCompleted = command.Execute();
+            if (!commandCompleted)
+            {
+                _uiRenderer.RenderError($"Error occured while executing '{command.Name}' command");
+            }
+            
+            if (_gameEngine.PuzzleSolved)
+            {
+                _uiRenderer.ClearScreen();
+                _uiRenderer.RenderVictoryScreen(_gameEngine.GetCurrentBoard());
 
-            // while (!_gameEngine.IsSolved())
-            // {
-            //     ShowPrompt();
-            //     var input = Console.ReadLine();
-            //     if (string.IsNullOrEmpty(input))
-            //     {
-            //         _uiRenderer.RenderWarning("Invalid input.");
-            //         continue;
-            //     }
-            //
-            //     HandleInput(input);
-            // }
-            //
-            // _uiRenderer.RenderVictoryScreen(_gameEngine.GetCurrentBoard());
+                executeNextRound = false;
+            }
         }
     }
 

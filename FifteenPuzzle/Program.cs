@@ -9,6 +9,7 @@ var renderer = new ConsoleRenderer();
 var parser = new CommandParser(gameEngine, renderer);
 
 var gameController = new GameController(
+    gameEngine: gameEngine,
     commandParser: parser,
     uiRenderer: renderer,
     commandProcessor: commandProcessor);

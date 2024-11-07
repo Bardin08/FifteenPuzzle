@@ -8,7 +8,8 @@ public class GameEngine : IGameEngine
 {
     private IBoard _board = null!;
 
-    public bool IsRunning { get; private set;  } = false;
+    public bool IsRunning { get; private set;  }
+    public bool PuzzleSolved { get; private set; }
 
     public void Initialize()
     {
@@ -16,17 +17,12 @@ public class GameEngine : IGameEngine
         _board.Grid.Shuffle();
 
         IsRunning = true;
+        PuzzleSolved = false;
     }
 
     public void Reset() => Initialize();
 
-    public IBoard GetCurrentBoard() => _board!;
-
-    public bool IsSolved()
-    {
-        var numbers = _board.Grid.ToList();
-        return numbers.SequenceEqual(numbers.OrderBy(x => x));
-    }
+    public IBoard GetCurrentBoard() => _board;
 
     public bool MakeMove(Move move)
     {
@@ -35,8 +31,17 @@ public class GameEngine : IGameEngine
             return false;
 
         _board.MoveTile(move);
-     
-        
+
+        CheckIfSolved();
         return true;
+    }
+
+    private void CheckIfSolved()
+    {
+        var numbers = _board.Grid.ToList();
+        PuzzleSolved = numbers.SequenceEqual(numbers.OrderBy(x => x));
+
+        if (PuzzleSolved)
+            IsRunning = false;
     }
 }

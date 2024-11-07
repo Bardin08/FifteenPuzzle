@@ -1,6 +1,6 @@
 ﻿using FifteenPuzzle;
 using FifteenPuzzle.Cli.Commands;
-using FifteenPuzzle.Cli.Display;
+using FifteenPuzzle.Cli.Console;
 using FifteenPuzzle.Core.Services;
 
 var gameEngine = new GameEngine();

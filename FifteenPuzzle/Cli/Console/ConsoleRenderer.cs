@@ -1,6 +1,6 @@
 using FifteenPuzzle.Core.Interfaces;
 
-namespace FifteenPuzzle.Cli.Display;
+namespace FifteenPuzzle.Cli.Console;
 
 public class ConsoleRenderer : IUiRenderer
 {
@@ -19,19 +19,19 @@ public class ConsoleRenderer : IUiRenderer
     public void RenderError(string error)
     {
         WriteColored($"❌ Error: {error}", ErrorColor);
-        Console.WriteLine();
+        System.Console.WriteLine();
     }
 
     public void RenderWarning(string message)
     {
         WriteColored($"⚠️ Warning: {message}", WarningColor);
-        Console.WriteLine();
+        System.Console.WriteLine();
     }
 
     public void RenderInfo(string message)
     {
         WriteColored(message, InfoColor);
-        Console.WriteLine();
+        System.Console.WriteLine();
     }
 
     public void RenderInputRequest(string message)
@@ -41,31 +41,31 @@ public class ConsoleRenderer : IUiRenderer
 
     public void ClearScreen()
     {
-        Console.Clear();
+        System.Console.Clear();
     }
 
     public void RenderWelcomeScreen()
     {
-        Console.Clear();
+        System.Console.Clear();
         RenderInfo(Messages.WelcomeScreen);
 
         Thread.Sleep(1500);
-        Console.Clear();
+        System.Console.Clear();
     }
 
     public void RenderVictoryScreen(IBoard board)
     {
-        Console.Clear();
+        System.Console.Clear();
         RenderBoard(board);
         RenderInfo(Messages.VictoryScreen);
 
         RenderInputRequest("Press any key to exit...");
-        Console.ReadKey(true);
+        System.Console.ReadKey(true);
     }
 
     public void RenderInstructionsScreen()
     {
-        Console.Clear();
+        System.Console.Clear();
         RenderInfo(Messages.Instructions); 
 
         RenderInputRequest("Press any key to continue...");
@@ -73,7 +73,7 @@ public class ConsoleRenderer : IUiRenderer
     
     public void RenderBoard(IBoard board)
     {
-        Console.WriteLine();
+        System.Console.WriteLine();
         RenderHorizontalBorder();
 
         for (var row = 0; row < 4; row++)
@@ -82,7 +82,7 @@ public class ConsoleRenderer : IUiRenderer
             RenderHorizontalBorder();
         }
 
-        Console.WriteLine();
+        System.Console.WriteLine();
     }
 
     private void RenderCell(int number)
@@ -107,7 +107,7 @@ public class ConsoleRenderer : IUiRenderer
             RenderCell(number);
             WriteColored(VerticalLine, BorderColor, false);
         }
-        Console.WriteLine();
+        System.Console.WriteLine();
     }
 
     private void RenderHorizontalBorder()
@@ -118,18 +118,18 @@ public class ConsoleRenderer : IUiRenderer
             WriteColored(HorizontalLine, BorderColor, false);
             WriteColored(Corner, BorderColor, false);
         }
-        Console.WriteLine();
+        System.Console.WriteLine();
     }
 
     private void WriteColored(string text, ConsoleColor color, bool writeLine = true)
     {
-        Console.ForegroundColor = color;
+        System.Console.ForegroundColor = color;
 
         if (writeLine)
-            Console.WriteLine(text);
+            System.Console.WriteLine(text);
         else
-            Console.Write(text);
+            System.Console.Write(text);
 
-        Console.ResetColor();
+        System.Console.ResetColor();
     }
 }

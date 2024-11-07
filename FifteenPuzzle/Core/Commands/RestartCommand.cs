@@ -1,7 +1,6 @@
-using FifteenPuzzle.Core.Commands;
 using FifteenPuzzle.Core.Interfaces;
 
-namespace FifteenPuzzle.Cli.Commands;
+namespace FifteenPuzzle.Core.Commands;
 
 public record RestartCommand : IGameCommand
 {

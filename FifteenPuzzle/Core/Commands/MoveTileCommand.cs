@@ -1,8 +1,7 @@
-using FifteenPuzzle.Core.Commands;
 using FifteenPuzzle.Core.Interfaces;
 using FifteenPuzzle.Core.Models;
 
-namespace FifteenPuzzle.Cli.Commands;
+namespace FifteenPuzzle.Core.Commands;
 
 public record MoveTileCommand : IGameCommand
 {

@@ -2,7 +2,6 @@ using DeepCopy;
 using FifteenPuzzle.Core.Events;
 using FifteenPuzzle.Core.Interfaces;
 using FifteenPuzzle.Core.Models;
-using FifteenPuzzle.Core.Utils;
 
 namespace FifteenPuzzle.Core.Services;
 

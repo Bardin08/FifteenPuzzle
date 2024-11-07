@@ -4,7 +4,7 @@ namespace FifteenPuzzle.Core.Models;
 
 public class Board : IBoard
 {
-    public List<int> Grid { get; set; }
+    public List<int> Grid { get; }
 
     public Board()
     {
@@ -63,4 +63,29 @@ public class Board : IBoard
     }
 
     private int GetTileIndex(int tileNumber) => Grid.IndexOf(tileNumber);
+
+    public void Shuffle(int seed = 12345, int n = 10_000)
+    {
+        var random = new Random(seed);
+
+        var movesLeft = n;
+        while (movesLeft > 0)
+        {
+            var direction = (Move.Direction)random.Next(0, 4);
+
+            var move = new Move
+            {
+                TileNumber = -1,
+                MoveDirection = direction
+            };
+
+            if (!CanMove(move))
+            {
+                continue;
+            }
+
+            MoveTile(move);
+            movesLeft--;
+        }
+    }
 }
